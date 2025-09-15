@@ -1,10 +1,12 @@
 import gc from "@sg/game-client-base";
 import { _decorator, Label, Node } from "cc";
-import { BetDetailLogItemType } from "db://shared-components/game/bet-history/scripts/components/bet-detail/bet-detail-log-item";
+import {
+    BaseBetDetailLogItem,
+    BetDetailLogItemType,
+} from "db://shared-components/game/bet-history/scripts/components/bet-detail/bet-detail-log-item";
+import { shortenName } from "db://shared-components/shared/utils/utils";
 import Observer from "observer";
 import { BetRecord } from "../types/balanced-betting.types";
-import { shortenName } from "../../../../../../shared-components/assets/shared/utils/utils";
-import { BaseBetDetailLogItem } from "../../../../../../shared-components/assets/game/bet-history/scripts/components/bet-detail/bet-detail-log-item";
 const { ccclass, property } = _decorator;
 const { render } = Observer;
 const { DateTimeUtils, Player, FormatUtils, Shared } = gc;
