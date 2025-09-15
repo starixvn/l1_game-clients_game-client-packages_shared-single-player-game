@@ -1,7 +1,7 @@
 {
-    "name": "portrait-shared-components",
+    "name": "shared-single-player-game",
     "version": "1.0.0",
-    "description": "i18n:shared-components.description",
+    "description": "i18n:shared-single-player-game.description",
     "contributions": {
         "asset-db": {
             "mount": {
