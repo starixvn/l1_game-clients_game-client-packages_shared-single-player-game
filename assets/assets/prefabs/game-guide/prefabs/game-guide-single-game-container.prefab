@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "game-guide-single-container",
+    "_name": "game-guide-single-game-container",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "game-guide-single-container",
+    "_name": "game-guide-single-game-container",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -76,8 +76,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 785.9999999999999,
-      "height": 1398
+      "width": 750,
+      "height": 1334
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

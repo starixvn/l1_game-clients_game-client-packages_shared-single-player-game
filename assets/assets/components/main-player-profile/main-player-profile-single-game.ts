@@ -4,7 +4,7 @@ import MainPlayerProfile from "db://shared-components/game/main-player-profile/s
 const { ccclass, property } = _decorator;
 
 @ccclass
-export default class MainPlayerProfileSingle extends MainPlayerProfile {
+export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     @property(Sprite)
     bgDollar: Sprite = null;
 

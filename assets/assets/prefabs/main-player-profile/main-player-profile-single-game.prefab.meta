@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "8f77bb26-8517-4cb3-b34f-f13c74a410ae",
+  "uuid": "3add5b54-875a-45a0-804e-1f037577f09c",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "game-guide-single-container"
+    "syncNodeName": "main-player-profile-single-game"
   }
 }

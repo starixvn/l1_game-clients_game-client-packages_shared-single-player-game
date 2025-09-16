@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "game-guide-single",
+    "_name": "game-guide-single-game",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "game-guide-single",
+    "_name": "game-guide-single-game",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -145,8 +145,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 828,
-      "height": 1106.9999999999998
+      "width": 750,
+      "height": 1334
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1295,7 +1295,7 @@
     },
     "_type": 0,
     "_fillType": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
       "x": 0,
@@ -2462,8 +2462,6 @@
       "__id__": 0
     },
     "fileId": "b9z9Lt/sZBKqJFoDUbkwMF",
-    "instance": null,
-    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -2480,8 +2478,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 750,
-      "height": 1002.9999999999998
+      "width": 672,
+      "height": 1260
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2575,8 +2573,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 828,
-      "height": 1076.9999999999998
+      "width": 750,
+      "height": 1334
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2624,8 +2622,8 @@
     "_target": null,
     "_left": 0,
     "_right": 0,
-    "_top": 15,
-    "_bottom": 15,
+    "_top": 0,
+    "_bottom": 0,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -2671,8 +2669,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 828,
-      "height": 1106.9999999999998
+      "width": 750,
+      "height": 1334
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2740,6 +2738,7 @@
       "__id__": 17
     },
     "autoShowWhenEnable": true,
+    "playClickWhenHide": false,
     "_id": ""
   },
   {

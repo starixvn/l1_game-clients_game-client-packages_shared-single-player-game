@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "in-game-menu-single",
+    "_name": "in-game-menu-single-game",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "in-game-menu-single",
+    "_name": "in-game-menu-single-game",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -45,8 +45,8 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -330.49999999999994,
-      "y": 650.5,
+      "x": -312.5,
+      "y": 618.5,
       "z": 0
     },
     "_lrot": {
