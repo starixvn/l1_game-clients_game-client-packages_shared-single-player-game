@@ -21,7 +21,7 @@ export class SingleGameRoundTimeStore {
     @inject(gc.GameConfigs.GameSetting) readonly gameSetting: SingleGameSetting;
 
     private _roundState = SINGLE_GAME_ROUND_STATE.NONE;
-    private _countdownTimer = 0;
+    private readonly _countdownTimer = 0;
     startNewRound = false;
     endRound = false;
     startPlacingBet = false;

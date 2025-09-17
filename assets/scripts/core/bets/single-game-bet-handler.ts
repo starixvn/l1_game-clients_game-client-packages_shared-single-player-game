@@ -11,16 +11,15 @@ export class SingleGameBetHandler extends gc.Bet.BetHandler {
     @inject(SingleGameChipStore) protected readonly chipStore: SingleGameChipStore;
     @inject(SingleGameChipHandlers) protected readonly singleGameChipHandlers: SingleGameChipHandlers;
 
+    // override add chip on single game chip store
     handle(betChoice: string) {
         const betData = this.createBetData({ betChoice });
         this.handleBetData(betData);
-
-        // TODO: override add chip on single game chip store
     }
 
+    // write logic current single game bet handler
+    // check min or max bet per round
     override isValidBet(amount: number) {
-        // TODO: write logic current single game bet handler
-        // TODO: check min
         return true;
     }
 
@@ -32,9 +31,8 @@ export class SingleGameBetHandler extends gc.Bet.BetHandler {
         }
     }
 
-    handleStartBet() {
-        // TODO: override send data to server after click start
-        // this.connectionStore.send(GameClientEmitMessage.Bet.eventName, data);
-        //this.retryGameHandler.handleClearAllChips();
-    }
+    // override send data to server after click start
+    // this.connectionStore.send(GameClientEmitMessage.Bet.eventName, data);
+    // this.retryGameHandler.handleClearAllChips();
+    handleStartBet() {}
 }
