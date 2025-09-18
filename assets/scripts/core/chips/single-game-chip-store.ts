@@ -59,5 +59,6 @@ export class SingleGameChipStore {
 
     resetChips() {
         this._ownChip = { betChoice: "", amount: 0, totalAmount: 0 };
+        this.clearAllChips = {};
     }
 }
