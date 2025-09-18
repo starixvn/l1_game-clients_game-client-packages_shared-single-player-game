@@ -8,9 +8,23 @@ const { injectable, inject } = inversify;
 export class SingleGameChipHandlers implements gc.Shared.IHandler<GameServiceMessage.OwnChip> {
     constructor() {}
     @inject(SingleGameChipStore) protected readonly store: SingleGameChipStore;
+    @inject(gc.Notices.NoticeStore) protected readonly noticeStore: gc.Notices.NoticeStore;
 
-    handle(ownChip: GameServiceMessage.OwnChip) {
-        this.store.ownChip = ownChip;
+    handle(ownChip: GameServiceMessage.OwnChip): boolean {
+        const result = this.store.addBet(ownChip.betChoice, ownChip.amount);
+        
+        if (!result.success) {
+            this.showBetRejectedNotice(result.reason);
+            return false;
+        }
+        
+        return true;
+    }
+
+    private showBetRejectedNotice(reason: string) {
+        this.noticeStore.warning = {
+            message: reason
+        };
     }
 
     handleClearAllChips() {

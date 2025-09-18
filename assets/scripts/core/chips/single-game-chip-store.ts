@@ -5,10 +5,6 @@ import mobx from "mobx";
 const { injectable, inject } = inversify;
 const { makeAutoObservable } = mobx;
 
-interface MainPlayerChips {
-    [choiceName: string]: gc.Chips.IChipGroup;
-}
-
 @injectable()
 export class SingleGameChipStore {
     // inject store
@@ -16,7 +12,7 @@ export class SingleGameChipStore {
         makeAutoObservable(this);
     }
 
-    private _ownChip: gc.GameServiceMessage.OwnChip = { betChoice: "", amount: 0 };
+    private _ownChip: gc.GameServiceMessage.OwnChip & { totalAmount?: number } = { betChoice: "", amount: 0, totalAmount: 0 };
 
     clearAllChips = null;
 
@@ -25,11 +21,51 @@ export class SingleGameChipStore {
     }
 
     set ownChip(data: gc.GameServiceMessage.OwnChip) {
-        this._ownChip = data;
+        this._ownChip = { ...data, totalAmount: this._ownChip.totalAmount || 0 };
+    }
+
+    canAddBet(betChoice: string): { canAdd: boolean; reason?: string } {
+        if (!this._ownChip.betChoice || this._ownChip.totalAmount === 0) {
+            return { canAdd: true };
+        }
+        
+        if (this._ownChip.betChoice === betChoice) {
+            return { canAdd: true };
+        }
+        
+        return { 
+            canAdd: false, 
+            reason: `Only one bet choice can be selected. You have already chosen "${this._ownChip.betChoice}", please clear first before selecting other options.`
+        };
+    }
+
+    addBet(betChoice: string, amount: number): { success: boolean; reason?: string } {
+        const validation = this.canAddBet(betChoice);
+        if (!validation.canAdd) {
+            return { success: false, reason: validation.reason };
+        }
+
+        const currentTotal = this._ownChip.totalAmount || 0;
+        const newTotal = currentTotal + amount;
+        
+        this._ownChip = { 
+            betChoice, 
+            amount,
+            totalAmount: newTotal
+        };
+
+        return { success: true };
+    }
+
+    getAccumulatedBetsForServer() {
+        return {
+            betChoice: this._ownChip.betChoice,
+            totalAmount: this._ownChip.totalAmount || 0
+        };
     }
 
     resetChips() {
-        this.ownChip = { betChoice: "", amount: 0 };
-        this.clearAllChips = {};
+        this._ownChip = { betChoice: "", amount: 0, totalAmount: 0 };
+        this.clearAllChips = { timestamp: Date.now() };
     }
 }

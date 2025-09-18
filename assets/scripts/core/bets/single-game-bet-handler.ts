@@ -24,10 +24,16 @@ export class SingleGameBetHandler extends gc.Bet.BetHandler {
     }
 
     override handleBetData(data: any) {
-        console.log("handleBetData", data);
         const amount = data.amount;
         if (this.isValidBet(amount)) {
-            this.singleGameChipHandlers.handle({ betChoice: data.betChoice, amount: data.amount });
+            const betSuccess = this.singleGameChipHandlers.handle({ betChoice: data.betChoice, amount: data.amount });
+            
+            if (betSuccess) {
+                console.log("🚀 ~ Bet accumulated, waiting for Start button to trigger sending");
+            } else {
+                console.log("🚀 ~ Bet failed, notice displayed, no visual effects triggered");
+                return;
+            }
         }
     }
 
