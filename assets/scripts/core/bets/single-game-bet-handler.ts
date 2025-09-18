@@ -30,8 +30,11 @@ export class SingleGameBetHandler extends gc.Bet.BetHandler {
         }
     }
 
-    // override send data to server after click start
-    // this.connectionStore.send(GameClientEmitMessage.Bet.eventName, data);
-    // this.retryGameHandler.handleClearAllChips();
-    handleStartBet() {}
+    handleStartBet() {
+        this.betStore.isProcessingBet = true;
+        const { betChoice, totalAmount } = this.chipStore.ownChip
+        const data = { betChoice, amount: totalAmount, redTunnel: 1, blueTunnel: 6 };
+        this.connectionStore.send(gc.GameClientEmitMessage.Bet.eventName, data);
+        this.retryGameHandler.handle();
+    }
 }

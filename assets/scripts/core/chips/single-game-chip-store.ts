@@ -5,6 +5,8 @@ import mobx from "mobx";
 const { injectable, inject } = inversify;
 const { makeAutoObservable } = mobx;
 
+export type SingleGameOwnChip = gc.GameServiceMessage.OwnChip & { totalAmount: number };
+
 @injectable()
 export class SingleGameChipStore {
     // inject store
@@ -12,11 +14,11 @@ export class SingleGameChipStore {
         makeAutoObservable(this);
     }
 
-    private _ownChip: gc.GameServiceMessage.OwnChip & { totalAmount?: number } = { betChoice: "", amount: 0, totalAmount: 0 };
+    private _ownChip: SingleGameOwnChip = { betChoice: "", amount: 0, totalAmount: 0 };
 
     clearAllChips = null;
 
-    get ownChip() {
+    get ownChip(): SingleGameOwnChip {
         return this._ownChip;
     }
 
