@@ -35,7 +35,7 @@ export class SingleGameChipStore {
         
         return { 
             canAdd: false, 
-            reason: `Only one bet choice can be selected. You have already chosen "${this._ownChip.betChoice}", please clear first before selecting other options.`
+            reason: `Already chosen "${this._ownChip.betChoice}". Please clear first.`
         };
     }
 
@@ -57,15 +57,7 @@ export class SingleGameChipStore {
         return { success: true };
     }
 
-    getAccumulatedBetsForServer() {
-        return {
-            betChoice: this._ownChip.betChoice,
-            totalAmount: this._ownChip.totalAmount || 0
-        };
-    }
-
     resetChips() {
         this._ownChip = { betChoice: "", amount: 0, totalAmount: 0 };
-        this.clearAllChips = { timestamp: Date.now() };
     }
 }
