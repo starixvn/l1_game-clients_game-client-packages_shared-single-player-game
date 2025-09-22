@@ -8,9 +8,6 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     @property(Sprite)
     bgDollar: Sprite = null;
 
-    @property({ override: true, visible: false })
-    sprAvatar: Sprite = null;
-
     enableFreeBet = false;
     scoin = 0;
 
