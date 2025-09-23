@@ -30,10 +30,10 @@ export class SingleGameBetHandler extends gc.Bet.BetHandler {
         }
     }
 
-    handleStartBet() {
+    handleStartBet(additionalData: any = {}) {
         this.betStore.isProcessingBet = true;
         const { betChoice, totalAmount } = this.chipStore.ownChip
-        const data = { betChoice, amount: totalAmount, redTunnel: 1, blueTunnel: 6 };
+        const data = { betChoice, amount: totalAmount, ...additionalData };
         this.connectionStore.send(gc.GameClientEmitMessage.Bet.eventName, data);
         this.retryGameHandler.handle();
     }
