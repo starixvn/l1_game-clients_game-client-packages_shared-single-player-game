@@ -2,6 +2,7 @@ export * from "./bet-control/bet-control-handler";
 export * from "./bet-control/bet-control-store";
 export * from "./bets/index";
 export * from "./chips/index";
+export * from "./game-configs/single-game-config-handlers";
 export * from "./game-configs/single-game-setting";
 export * from "./rounds/single-game-round-store";
 export * from "./rounds/single-game-round-time-handlers";
