@@ -33,6 +33,7 @@ export class SingleGameRoundTimeStore {
         this.setDurationShowPromptMessage(this.gameSetting?.durationShowPromptMessage);
     }
 
+    // temporary: remove this method after service is updated, do not return remainingTime
     resetRoundTime() {}
 
     setDurationShowPromptMessage(durationShowPromptMessage?: number) {
@@ -47,6 +48,7 @@ export class SingleGameRoundTimeStore {
         this._roundState = value;
     }
 
+    // temporary: remove this method after service is updated, do not return remainingTime
     get countdownTimer() {
         return this._countdownTimer;
     }
@@ -55,9 +57,9 @@ export class SingleGameRoundTimeStore {
         return this.roundState;
     }
 
-    resetRoundTimeStore() {
-        this.roundState = SINGLE_GAME_ROUND_STATE.STOP_GAME_LOOP;
-    }
+    // temporary: remove this method after service is updated, do not return remainingTime
+    resetRoundTimeStore() {}
 
+    // temporary: remove this method after service is updated, do not return remainingTime
     countdown() {}
 }
