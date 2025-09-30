@@ -1,4 +1,4 @@
-import * as gc from "@sg/game-client-base";
+import gc from "@sg/game-client-base";
 import inversify from "inversify";
 import mobx from "mobx";
 
@@ -37,7 +37,7 @@ export class SingleGameChipStore {
         
         return { 
             canAdd: false, 
-            reason: `Already chosen "${this._ownChip.betChoice}". Please clear first.`
+            reason: gc.Translator.gameTranslate(`message_chosen_bet`, { betChoice: this._ownChip.betChoice })
         };
     }
 
