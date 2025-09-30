@@ -2462,6 +2462,8 @@
       "__id__": 0
     },
     "fileId": "b9z9Lt/sZBKqJFoDUbkwMF",
+    "instance": null,
+    "targetOverrides": null,
     "nestedPrefabInstanceRoots": null
   },
   {
@@ -2478,7 +2480,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 672,
+      "width": 710,
       "height": 1260
     },
     "_anchorPoint": {
@@ -2524,8 +2526,8 @@
     },
     "_alignFlags": 45,
     "_target": null,
-    "_left": 39,
-    "_right": 39,
+    "_left": 20,
+    "_right": 20,
     "_top": 37,
     "_bottom": 37,
     "_horizontalCenter": 0,
