@@ -1,6 +1,7 @@
 import gc from "@sg/game-client-base";
 import inversify from "inversify";
 import mobx from "mobx";
+import { SingleGameRoundStore } from "../rounds/single-game-round-store";
 
 const { injectable, inject } = inversify;
 const { makeAutoObservable } = mobx;
@@ -9,6 +10,8 @@ export type SingleGameOwnChip = gc.GameServiceMessage.OwnChip & { totalAmount: n
 
 @injectable()
 export class SingleGameChipStore {
+    @inject(SingleGameRoundStore) protected readonly roundStore: SingleGameRoundStore;
+
     // inject store
     constructor() {
         makeAutoObservable(this);
@@ -26,30 +29,46 @@ export class SingleGameChipStore {
         this._ownChip = { ...data, totalAmount: this._ownChip.totalAmount || 0 };
     }
 
-    canAddBet(betChoice: string): { canAdd: boolean; reason?: string } {
+    private isBetChoiceValid(betChoice: string): { isValid: boolean; reason?: string } {
         if (!this._ownChip.betChoice || this._ownChip.totalAmount === 0) {
-            return { canAdd: true };
+            return { isValid: true };
         }
-        
         if (this._ownChip.betChoice === betChoice) {
-            return { canAdd: true };
+            return { isValid: true };
         }
-        
         return { 
-            canAdd: false, 
+            isValid: false, 
             reason: gc.Translator.gameTranslate(`message_chosen_bet`, { betChoice: gc.Translator.gameTranslate(`glossary_${this._ownChip.betChoice}`) })
         };
     }
 
+    private calculateNewTotal(amount: number): number {
+        return (this._ownChip.totalAmount || 0) + amount;
+    }
+
+    private isExceedingMaxBet(newTotal: number): boolean {
+        const maxBet = this.roundStore?.maxBet;
+        return maxBet && newTotal > maxBet;
+    }
+
+    private getMaxBetExceededReason(): string {
+        const maxBet = this.roundStore?.maxBet;
+        return gc.Translator.commonTranslate(`message_round_maxbet`, { 
+            maxBet: gc.FormatUtils.numberWithCommas(maxBet) 
+        });
+    }
+
     addBet(betChoice: string, amount: number): { success: boolean; reason?: string } {
-        const validation = this.canAddBet(betChoice);
-        if (!validation.canAdd) {
+        const validation = this.isBetChoiceValid(betChoice);
+        if (!validation.isValid) {
             return { success: false, reason: validation.reason };
         }
 
-        const currentTotal = this._ownChip.totalAmount || 0;
-        const newTotal = currentTotal + amount;
-        
+        const newTotal = this.calculateNewTotal(amount);
+        if (this.isExceedingMaxBet(newTotal)) {
+            return { success: false, reason: this.getMaxBetExceededReason() };
+        }
+
         this._ownChip = { 
             betChoice, 
             amount,
