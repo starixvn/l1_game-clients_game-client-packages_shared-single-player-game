@@ -37,7 +37,7 @@ export class SingleGameChipStore {
         
         return { 
             canAdd: false, 
-            reason: gc.Translator.gameTranslate(`message_chosen_bet`, { betChoice: this._ownChip.betChoice })
+            reason: gc.Translator.gameTranslate(`message_chosen_bet`, { betChoice: gc.Translator.gameTranslate(`glossary_${this._ownChip.betChoice}`) })
         };
     }
 
