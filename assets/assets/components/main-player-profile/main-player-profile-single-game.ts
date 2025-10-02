@@ -3,6 +3,7 @@ import gc from "@sg/game-client-base";
 import Observer from "observer";
 import MainPlayerProfile from "db://shared-components/game/main-player-profile/scripts/components/main-player-profile";
 import { SINGLE_GAME_ROUND_STATE, SingleGameRoundTimeStore } from "db://shared-single-player-game/scripts/core/rounds/single-game-round-time-store";
+import { AnimationUtils } from "db://shared-components/shared/utils/utils";
 
 const { FormatUtils, Auth } = gc;
 const { ccclass, property } = _decorator;
@@ -21,7 +22,7 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
 
     private enableFreeBet = false;
     private scoin = 0;
-    private settlementStatus: gc.GameServiceMessage.Status = null;
+    private settlementStatus: gc.GameServiceMessage.Status;
     private currentRoundState: string = SINGLE_GAME_ROUND_STATE.NONE;
 
     activeUserScoinWallet(enableFreeBet: boolean) {
@@ -71,7 +72,7 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
         );
     }
 
-    private displayWinBalance() {
+    private async displayWinBalance() {
         if (!this.nodeWinBalance || !this.labelWinBet) {
             return;
         }
@@ -81,6 +82,7 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
         
         this.nodeWinBalance.active = true;
         this.playWinBalanceAnimation();
+        await AnimationUtils.delayTime(1.2);
         this.getBalance();
     }
 
