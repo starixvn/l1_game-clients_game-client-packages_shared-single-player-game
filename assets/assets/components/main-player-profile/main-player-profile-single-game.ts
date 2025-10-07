@@ -1,11 +1,12 @@
-import { _decorator, Animation, Label, Node, Sprite } from "cc";
+import { _decorator, Sprite } from "cc";
 import gc from "@sg/game-client-base";
 import Observer from "observer";
 import MainPlayerProfile from "db://shared-components/game/main-player-profile/scripts/components/main-player-profile";
 import { SINGLE_GAME_ROUND_STATE, SingleGameRoundTimeStore } from "db://shared-single-player-game/scripts/core/rounds/single-game-round-time-store";
+import { BalanceEffectHandlers } from "db://shared-components/game/balance-effect/scripts/handlers/balance-effect-handlers";
 import { AnimationUtils } from "db://shared-components/shared/utils/utils";
 
-const { FormatUtils, Auth } = gc;
+const { Auth } = gc;
 const { ccclass, property } = _decorator;
 const { render, handle } = Observer;
 
@@ -13,12 +14,6 @@ const { render, handle } = Observer;
 export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     @property(Sprite)
     bgDollar: Sprite = null;
-
-    @property(Node)
-    nodeWinBalance: Node = null;
-
-    @property(Label)
-    labelWinBet: Label = null;
 
     private enableFreeBet = false;
     private scoin = 0;
@@ -73,22 +68,14 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     }
 
     private async displayWinBalance() {
-        if (!this.nodeWinBalance || !this.labelWinBet) {
-            return;
-        }
-
-        const formattedBet = FormatUtils.truncateFixedDecimals(this.settlementStatus.bet, 2);
-        this.labelWinBet.string = formattedBet.toString();
-        
-        this.nodeWinBalance.active = true;
-        this.playWinBalanceAnimation();
+        this.mainPlayerIncreaseBalance(this.settlementStatus.bet);
         await AnimationUtils.delayTime(1.2);
         this.getBalance();
     }
 
-    private playWinBalanceAnimation() {
-        const animation = this.nodeWinBalance.getComponent(Animation);
-        animation?.play();
+    @handle(BalanceEffectHandlers.MainPlayerIncreaseBalance)
+    mainPlayerIncreaseBalance(balance: number) {
+        return balance;
     }
 
     @handle(Auth.AuthHandlers.GetBalance)
