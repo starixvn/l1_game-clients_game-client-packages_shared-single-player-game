@@ -114,6 +114,7 @@
     },
     "startY": 80,
     "destY": 10,
+    "floatUpBalanceNode": null,
     "_id": ""
   },
   {
