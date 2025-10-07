@@ -11,6 +11,7 @@ export type SingleGameOwnChip = gc.GameServiceMessage.OwnChip & { totalAmount: n
 @injectable()
 export class SingleGameChipStore {
     @inject(SingleGameRoundStore) protected readonly roundStore: SingleGameRoundStore;
+    @inject(gc.Player.MainPlayerStore) protected readonly mainPlayerStore: gc.Player.MainPlayerStore;
 
     // inject store
     constructor() {
@@ -58,6 +59,15 @@ export class SingleGameChipStore {
         });
     }
 
+    private isInsufficientBalance(newTotal: number): boolean {
+        const currentBalance = this.mainPlayerStore?.balance || 0;
+        return newTotal > currentBalance;
+    }
+
+    private getInsufficientBalanceReason(): string {
+        return gc.Translator.commonTranslate(`not_enough_money`);
+    }
+
     addBet(betChoice: string, amount: number): { success: boolean; reason?: string } {
         const validation = this.isBetChoiceValid(betChoice);
         if (!validation.isValid) {
@@ -67,6 +77,10 @@ export class SingleGameChipStore {
         const newTotal = this.calculateNewTotal(amount);
         if (this.isExceedingMaxBet(newTotal)) {
             return { success: false, reason: this.getMaxBetExceededReason() };
+        }
+
+        if (this.isInsufficientBalance(newTotal)) {
+            return { success: false, reason: this.getInsufficientBalanceReason() };
         }
 
         this._ownChip = { 
