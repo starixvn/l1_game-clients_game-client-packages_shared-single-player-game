@@ -44,6 +44,13 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
         this.updateWinBalanceDisplay();
     }
 
+    setBalance(value: number) {
+        if (this.currentRoundState === SINGLE_GAME_ROUND_STATE.PLAYING_VIDEO) {
+            return;
+        }
+        super.setBalance(value);
+    }
+
     private updateScoinWalletVisibility() {
         const shouldShow = this.shouldShowScoinWallet();
         this.userScoinWallet.active = shouldShow;
@@ -69,7 +76,6 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
 
     private async displayWinBalance() {
         this.mainPlayerIncreaseBalance(this.settlementStatus.bet);
-        await AnimationUtils.delayTime(1.2);
         this.getBalance();
     }
 
