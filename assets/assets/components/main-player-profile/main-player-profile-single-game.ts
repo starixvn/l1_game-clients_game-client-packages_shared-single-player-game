@@ -4,7 +4,6 @@ import Observer from "observer";
 import MainPlayerProfile from "db://shared-components/game/main-player-profile/scripts/components/main-player-profile";
 import { SINGLE_GAME_ROUND_STATE, SingleGameRoundTimeStore } from "db://shared-single-player-game/scripts/core/rounds/single-game-round-time-store";
 import { BalanceEffectHandlers } from "db://shared-components/game/balance-effect/scripts/handlers/balance-effect-handlers";
-import { AnimationUtils } from "db://shared-components/shared/utils/utils";
 
 const { Auth } = gc;
 const { ccclass, property } = _decorator;
