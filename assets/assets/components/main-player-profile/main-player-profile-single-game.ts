@@ -2,7 +2,10 @@ import { _decorator, Sprite } from "cc";
 import gc from "@sg/game-client-base";
 import Observer from "observer";
 import MainPlayerProfile from "db://shared-components/game/main-player-profile/scripts/components/main-player-profile";
-import { SINGLE_GAME_ROUND_STATE, SingleGameRoundTimeStore } from "db://shared-single-player-game/scripts/core/rounds/single-game-round-time-store";
+import {
+    SINGLE_GAME_ROUND_STATE,
+    SingleGameRoundTimeStore,
+} from "db://shared-single-player-game/scripts/core/rounds/single-game-round-time-store";
 import { BalanceEffectHandlers } from "db://shared-components/game/balance-effect/scripts/handlers/balance-effect-handlers";
 
 const { Auth } = gc;
@@ -18,6 +21,7 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     private scoin = 0;
     private settlementStatus: gc.GameServiceMessage.Status;
     private currentRoundState: string = SINGLE_GAME_ROUND_STATE.NONE;
+    private cachedBalance = 0;
 
     activeUserScoinWallet(enableFreeBet: boolean) {
         super.activeUserScoinWallet(enableFreeBet);
@@ -43,8 +47,10 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
         this.updateWinBalanceDisplay();
     }
 
+    @render(gc.Player.MainPlayerStore, (store) => store.balance)
     setBalance(value: number) {
         if (this.currentRoundState === SINGLE_GAME_ROUND_STATE.PLAYING_VIDEO) {
+            this.cachedBalance = value;
             return;
         }
         super.setBalance(value);
@@ -67,15 +73,13 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
     }
 
     private shouldShowWinBalance(): boolean {
-        return (
-            this.currentRoundState === SINGLE_GAME_ROUND_STATE.SHOW_RESULT &&
-            this.settlementStatus?.win === true
-        );
+        return this.currentRoundState === SINGLE_GAME_ROUND_STATE.SHOW_RESULT && this.settlementStatus?.win === true;
     }
 
     private async displayWinBalance() {
         this.mainPlayerIncreaseBalance(this.settlementStatus.bet);
         this.getBalance();
+        this.renderCachedBalance();
     }
 
     @handle(BalanceEffectHandlers.MainPlayerIncreaseBalance)
@@ -85,4 +89,13 @@ export default class MainPlayerProfileSingleGame extends MainPlayerProfile {
 
     @handle(Auth.AuthHandlers.GetBalance)
     getBalance() {}
+
+    renderCachedBalance() {
+        if (this.cachedBalance !== 0) {
+            const balance = this.cachedBalance;
+
+            this.cachedBalance = 0;
+            this.setBalance(balance);
+        }
+    }
 }
