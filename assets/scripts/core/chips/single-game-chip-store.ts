@@ -8,19 +8,30 @@ const { makeAutoObservable } = mobx;
 
 export type SingleGameOwnChip = gc.GameServiceMessage.OwnChip & { totalAmount: number };
 
+export type BetValidationResult = {
+    success: boolean;
+    reason?: string;
+};
+
 @injectable()
 export class SingleGameChipStore {
     @inject(SingleGameRoundStore) protected readonly roundStore: SingleGameRoundStore;
     @inject(gc.Player.MainPlayerStore) protected readonly mainPlayerStore: gc.Player.MainPlayerStore;
+    @inject(gc.GameConfigs.GameConfigStore) protected readonly gameConfigStore: gc.GameConfigs.GameConfigStore;
 
-    // inject store
+    private static readonly INITIAL_CHIP_STATE: SingleGameOwnChip = {
+        betChoice: "",
+        amount: 0,
+        totalAmount: 0,
+    };
+
     constructor() {
         makeAutoObservable(this);
     }
 
-    private _ownChip: SingleGameOwnChip = { betChoice: "", amount: 0, totalAmount: 0 };
+    private _ownChip: SingleGameOwnChip = { ...SingleGameChipStore.INITIAL_CHIP_STATE };
 
-    clearAllChips = null;
+    clearAllChips: Record<string, any> | null = null;
 
     get ownChip(): SingleGameOwnChip {
         return this._ownChip;
@@ -30,15 +41,15 @@ export class SingleGameChipStore {
         this._ownChip = { ...data, totalAmount: this._ownChip.totalAmount || 0 };
     }
 
-    private isBetChoiceValid(betChoice: string): { isValid: boolean; reason?: string } {
+    private isBetChoiceValid(betChoice: string): BetValidationResult {
         if (!this._ownChip.betChoice || this._ownChip.totalAmount === 0) {
-            return { isValid: true };
+            return { success: true };
         }
         if (this._ownChip.betChoice === betChoice) {
-            return { isValid: true };
+            return { success: true };
         }
         return { 
-            isValid: false, 
+            success: false, 
             reason: gc.Translator.gameTranslate(`message_chosen_bet`, { betChoice: gc.Translator.gameTranslate(`glossary_${this._ownChip.betChoice}`) })
         };
     }
@@ -59,6 +70,22 @@ export class SingleGameChipStore {
         });
     }
 
+    private getMaxBetForChoice(betChoice: string): number | undefined {
+        return this.gameConfigStore?.maxBetPerChoices?.[betChoice];
+    }
+
+    private isExceedingMaxBetPerChoice(betChoice: string, newTotal: number): boolean {
+        const maxBet = this.getMaxBetForChoice(betChoice);
+        return maxBet !== undefined && newTotal > maxBet;
+    }
+
+    private getMaxBetPerChoiceExceededReason(betChoice: string): string {
+        const maxBet = this.getMaxBetForChoice(betChoice);
+        return gc.Translator.commonTranslate(`message_option_maxbet`, { 
+            maxBet: gc.FormatUtils.numberWithCommas(maxBet) 
+        });
+    }
+
     private isInsufficientBalance(newTotal: number): boolean {
         const currentBalance = this.mainPlayerStore?.balance || 0;
         return newTotal > currentBalance;
@@ -68,15 +95,19 @@ export class SingleGameChipStore {
         return gc.Translator.commonTranslate(`not_enough_money`);
     }
 
-    addBet(betChoice: string, amount: number): { success: boolean; reason?: string } {
+    addBet(betChoice: string, amount: number): BetValidationResult {
         const validation = this.isBetChoiceValid(betChoice);
-        if (!validation.isValid) {
+        if (!validation.success) {
             return { success: false, reason: validation.reason };
         }
 
         const newTotal = this.calculateNewTotal(amount);
         if (this.isExceedingMaxBet(newTotal)) {
             return { success: false, reason: this.getMaxBetExceededReason() };
+        }
+
+        if (this.isExceedingMaxBetPerChoice(betChoice, newTotal)) {
+            return { success: false, reason: this.getMaxBetPerChoiceExceededReason(betChoice) };
         }
 
         if (this.isInsufficientBalance(newTotal)) {
@@ -93,7 +124,7 @@ export class SingleGameChipStore {
     }
 
     resetChips() {
-        this._ownChip = { betChoice: "", amount: 0, totalAmount: 0 };
+        this._ownChip = { ...SingleGameChipStore.INITIAL_CHIP_STATE };
         this.clearAllChips = {};
     }
 }
